@@ -1,8 +1,6 @@
 name: Deploy Local Docker Host
-
-on:
-  push:
-    branches: [ "main" ] # Trigger deployment on pushes to your main branch
+on :
+workflow_dispatch
 
 jobs:
   deploy:
