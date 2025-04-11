@@ -4,7 +4,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: sonal # Ensure this job runs on your self-hosted runner
+    runs-on: self-hosted # Ensure this job runs on your self-hosted runner
 
     steps:
     - name: Checkout code
