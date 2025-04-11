@@ -1,8 +1,8 @@
 name: CD to Standalone Docker Host
 
 on:
-  push:
-    branches: [ "main" ] # Trigger deployment on pushes to your main branch
+  workflow_dispatch:
+    # Trigger deployment on pushes to your main branch
 
 jobs:
   deploy:
