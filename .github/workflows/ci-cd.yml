@@ -1,39 +1,28 @@
-name: CD to Standalone Docker Host
+name: Deploy Local Docker Host
 
 on:
-  workflow_dispatch:
-    # Trigger deployment on pushes to your main branch
+  push:
+    branches: [ "main" ] # Trigger deployment on pushes to your main branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted # Ensure this job runs on your self-hosted runner
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    #- name: Set up SSH
-    #  uses: webfactory/ssh-agent@v1 
-    #  with:
-    #   ssh-private-key: ${{ secrets.DEPLOYMENT_SSH_KEY }}
+    #- name: Navigate to Docker Compose Directory
+      #run: cd /path/to/your/docker-compose/directory # Replace with the actual path
 
-    # name: Install SSH client
-    #  run: sudo apt-get update && sudo apt-get install -y openssh-client
+    - name: Stop Existing Containers (if any)
+      run: docker-compose down
 
-    - name: Deploy to Docker Host
-      run: |
-        echo "Deploying to ${{ secrets.DEPLOYMENT_HOST }}"
-        ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOYMENT_USER }}@${{ secrets.DEPLOYMENT_HOST }} << EOF
-          echo "Connected to Docker host"
-          cd ../../  # Replace with the actual path on your server
-          echo "Stopping existing containers (if any)"
-          docker-compose down
-          echo "Pulling latest images"
-          docker-compose pull
-          echo "Starting containers"
-          docker-compose up -d
-          echo "Deployment complete"
-        EOF
+    - name: Pull Latest Images
+      run: docker-compose pull
+
+    - name: Start Containers
+      run: docker-compose up -d
 
     - name: Deployment successful
-      run: echo "Application deployed successfully!"
+      run: echo "Application deployed successfully on the local Docker host!"
