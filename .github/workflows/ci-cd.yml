@@ -24,3 +24,4 @@ jobs:
 
     - name: Deployment successful
       run: echo "Application deployed successfully on the local Docker host!"
+      #
