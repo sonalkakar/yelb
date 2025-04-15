@@ -3,6 +3,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  linter:
+    runs-on: self-hosted 
+    steps:
+    - name: Scan the Docker Files with Liner
+      run: sudo hadolint 
+    
   deploy:
     runs-on: self-hosted # Ensure this job runs on your self-hosted runner
 
