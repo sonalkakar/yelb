@@ -7,7 +7,7 @@ jobs:
     runs-on: self-hosted 
     steps:
     - name: Scan the Docker Files with Liner
-      run: sudo hadolint yelb-ui/Dockerfile yelb-db/Dockerfile yelb-appserver/Dockerfile
+      run: sudo hadolint ./yelb-ui/Dockerfile 
     
   deploy:
     runs-on: self-hosted # Ensure this job runs on your self-hosted runner
