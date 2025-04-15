@@ -24,17 +24,18 @@ jobs:
  #         curl -sSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh
   #        sudo mv ~/.docker/cli-plugins/docker-scout /usr/local/bin/
 
-    - name: Scan Application Image 1
+    - name: Scan Application UI
       run: sudo docker-scout cves mreferre/yelb-ui:0.10  # Replace with your actual image name and tag
-    - name: Analyze Scout Results and Fail on High/Critical (Example for one image)
-      run: |
-            HIGH_COUNT=$(sudo docker-scout cves mreferre/yelb-ui:0.10  --severity high | grep -c "HIGH")
-            CRITICAL_COUNT=$(sudo docker-scout cves yelb-ui:0.10  --severity critical | grep -c "CRITICAL")
-
-            echo "High severity vulnerabilities found in UI application: $HIGH_COUNT"
-            echo "Critical severity vulnerabilities found in UI Application: $CRITICAL_COUNT"
-            if [ "$HIGH_COUNT" -gt 0 ] || [ "$CRITICAL_COUNT" -gt 0 ]; then
-              echo "High or critical vulnerabilities found."ulnerabilitie forund"
+      
+    - name: Scan Application App Server
+      run: sudo docker-scout cves mreferre/yelb-appserver:0.7  # Replace with your actual image name and tag
+      
+    - name: Scan Redis 
+      run: sudo docker-scout cves redis:4.0.2 # Replace with your actual image name and tag
+      
+    - name: Scan Database
+      run: sudo docker-scout cves mreferre/yelb-db:0.6  # Replace with your actual image name and tag
+    
             
     - name: Start Containers
       run: docker-compose up -d
