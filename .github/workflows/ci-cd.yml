@@ -25,11 +25,11 @@ jobs:
   #        sudo mv ~/.docker/cli-plugins/docker-scout /usr/local/bin/
 
     - name: Scan Application Image 1
-      run: docker-scout cves mreferre/yelb-ui:0.10:latest  # Replace with your actual image name and tag
+      run: sudo docker-scout cves mreferre/yelb-ui:0.10  # Replace with your actual image name and tag
     - name: Analyze Scout Results and Fail on High/Critical (Example for one image)
       run: |
-          HIGH_COUNT=$(docker-scout cves mreferre/yelb-ui:0.10:latest --severity high | grep -c "HIGH")
-          CRITICAL_COUNT=$(docker-scout cves mreferre/yelb-ui:0.10:latest  --severity critical | grep -c "CRITICAL")
+          HIGH_COUNT=$(sudo docker-scout cves mreferre/yelb-ui:0.10  --severity high | grep -c "HIGH")
+          CRITICAL_COUNT=$(sudo docker-scout cves yelb-ui:0.10  --severity critical | grep -c "CRITICAL")
 
           echo "High severity vulnerabilities found in UI application: $HIGH_COUNT"
           echo "Critical severity vulnerabilities found in UI Application: $CRITICAL_COUNT"
