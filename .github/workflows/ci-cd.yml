@@ -44,12 +44,12 @@ jobs:
     #- name: Scan Database
     #  run: sudo docker-scout cves mreferre/yelb-db:0.6  # Replace with your actual image name and tag
     # store the reports in jfrog
-    - name: Upload Vulnerability Report via REST API
+    - name: Upload Vulnerability 
        run:|
             mkdir -p vulreport
-            sudo docker scout cves --format json redis:4.0.2 > vulreport/redis-scan-report.json
-            sudo docker scout cves --format json mreferre/yelb-ui:0.10 > vulreport/ui-scan-report.json
-            sudo docker scout cves --format json mreferre/yelb-appserver:0.7 > vulreport/appserver-scan-report.json
+            #sudo docker scout cves --format json redis:4.0.2 > vulreport/redis-scan-report.json
+            #sudo docker scout cves --format json mreferre/yelb-ui:0.10 > vulreport/ui-scan-report.json
+            #sudo docker scout cves --format json mreferre/yelb-appserver:0.7 > vulreport/appserver-scan-report.json
 
     - name: Start Containers
       run: docker-compose up -d
