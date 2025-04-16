@@ -31,19 +31,31 @@ jobs:
  #         curl -sSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh | sh
   #        sudo mv ~/.docker/cli-plugins/docker-scout /usr/local/bin/
 
-    - name: Scan Application UI
-      run: sudo docker-scout cves mreferre/yelb-ui:0.10  # Replace with your actual image name and tag
       
-    - name: Scan Application App Server
-      run: sudo docker-scout cves mreferre/yelb-appserver:0.7  # Replace with your actual image name and tag
+   # - name: Scan Application UI
+    #  run:  sudo docker-scout cves mreferre/yelb-ui:0.10  # Replace with your actual image name and tag
       
-    - name: Scan Redis 
-      run: sudo docker-scout cves redis:4.0.2 # Replace with your actual image name and tag
+    #- name: Scan Application App Server
+    #  run: sudo docker-scout cves mreferre/yelb-appserver:0.7  # Replace with your actual image name and tag
       
-    - name: Scan Database
-      run: sudo docker-scout cves mreferre/yelb-db:0.6  # Replace with your actual image name and tag
-    
-            
+    #- name: Scan Redis 
+    #  run: sudo docker-scout cves redis:4.0.2 # Replace with your actual image name and tag
+      
+    #- name: Scan Database
+    #  run: sudo docker-scout cves mreferre/yelb-db:0.6  # Replace with your actual image name and tag
+    # store the reports in jfrog
+    - name: Upload Vulnerability Report via REST API
+      run: |
+          mkdir -p vulreport 
+          curl -H "X-JFrog-Art-Api:${{ secrets.YOUR_JFROG_TOKEN_SECRET }}" -X PUT \
+          "${{ secrets.JFROG_URL }}/artifactory/${{ secrets.JFROG_REPORT_REPO }}/${{ secrets.JFROG_REPORT_PATH }}/${{ github.run_id }}-vulnerability-report.json" \
+          -T "reports/vulnerability-report.json"
+          sudo docker scout cves --format json redis:4.0.2 > vulreport/redis-scan-report.json
+          sudo docker-scout cves -format json mreferre/yelb-ui:0.10 > vulreport/ui-scan-report.json
+          sudo docker-scout cves -format json mreferre/yelb-appserver:0.7>vulreport/appserver-scan-report.json
+          echo "REPORT_PATH=$(pwd)/vulreport/redis-scan-report.json" >> $GITHUB_OUTPUT
+          echo "REPORT_PATH=$(pwd)/vulreport/ui-scan-report.json" >> $GITHUB_OUTPUT
+          echo "REPORT_PATH=$(pwd)/vulreport/appserver-scan-report.json" >> $GITHUB_OUTPUT
     - name: Start Containers
       run: docker-compose up -d
 
